@@ -6,6 +6,7 @@ import com.ajedrez.motor.piezas.Rey;
 import com.ajedrez.motor.tablero.Movida;
 import com.ajedrez.motor.tablero.Tablero;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,9 +24,8 @@ public abstract class Jugador {
             final Collection<Movida> movidasOponente) {
         this.tablero = tablero;
         this.reyJugador = establecerRey();
-        this.movidasLegales = movidasLegales;
-        this.isEnJaque = !Jugador.calcularAtaquesEnCasilla(
-                this.reyJugador.getPosicionPieza(), movidasOponente).isEmpty();
+        this.movidasLegales = ImmutableList.copyOf(Iterables.concat(movidasLegales, calcularEnroques(movidasLegales, movidasOponente)));
+        this.isEnJaque = !Jugador.calcularAtaquesEnCasilla(this.reyJugador.getPosicionPieza(),movidasOponente).isEmpty();
     }
 
     public Rey getReyJugador() {
@@ -36,7 +36,7 @@ public abstract class Jugador {
         return this.movidasLegales;
     }
 
-    private static Collection<Movida> calcularAtaquesEnCasilla(int posicionPieza, Collection<Movida> movidas) {
+    protected static Collection<Movida> calcularAtaquesEnCasilla(int posicionPieza, Collection<Movida> movidas) {
         final List<Movida> movidasAtaque = new ArrayList<>();
         for ( final Movida movida : movidas ) {
             if (posicionPieza == movida.getCoordenadasDestino()) {
@@ -109,4 +109,6 @@ public abstract class Jugador {
     public abstract Collection<Pieza> getPiezasActivas();
     public abstract Alianza getAlianza();
     public abstract Jugador getOponente();
+    protected abstract Collection<Movida> calcularEnroques(Collection<Movida> movidasLegalesJugador,
+                                                               Collection<Movida> movidasLegalesOponente);
 }

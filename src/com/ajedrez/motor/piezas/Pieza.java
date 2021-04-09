@@ -16,7 +16,7 @@ public abstract class Pieza {
         this.tipoPieza = tipoPieza;
         this.posicionPieza = posicionPieza;
         this.alianzaPieza = alianzaPieza;
-        // FALTA
+        // todo
         this.isPrimeraMovida = false;
         this.cacheHashCode = computarHashCode();
     }
@@ -78,10 +78,18 @@ public abstract class Pieza {
             public boolean isRey() {
                 return false;
             }
+            @Override
+            public boolean isTorre() {
+                return false;
+            }
         },
         CABALLO("N") {
             @Override
             public boolean isRey() {
+                return false;
+            }
+            @Override
+            public boolean isTorre() {
                 return false;
             }
         },
@@ -90,11 +98,19 @@ public abstract class Pieza {
             public boolean isRey() {
                 return false;
             }
+            @Override
+            public boolean isTorre() {
+                return false;
+            }
         },
         TORRE("R") {
             @Override
             public boolean isRey() {
                 return false;
+            }
+            @Override
+            public boolean isTorre() {
+                return true;
             }
         },
         REINA("Q") {
@@ -102,11 +118,19 @@ public abstract class Pieza {
             public boolean isRey() {
                 return false;
             }
+            @Override
+            public boolean isTorre() {
+                return false;
+            }
         },
         REY("K") {
             @Override
             public boolean isRey() {
                 return true;
+            }
+            @Override
+            public boolean isTorre() {
+                return false;
             }
         };
 
@@ -122,5 +146,7 @@ public abstract class Pieza {
         }
 
         public abstract boolean isRey();
+
+        public abstract boolean isTorre();
     }
 }

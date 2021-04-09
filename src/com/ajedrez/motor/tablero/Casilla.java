@@ -35,6 +35,10 @@ public abstract class Casilla {
 
     public abstract Pieza getPieza();
 
+    public int getCoordenadas() {
+        return this.coordenada;
+    }
+
     //  CASILLA VACIA
     public static final class CasillaVacia extends Casilla {
 

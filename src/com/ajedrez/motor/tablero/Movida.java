@@ -2,6 +2,8 @@ package com.ajedrez.motor.tablero;
 
 import com.ajedrez.motor.piezas.Peon;
 import com.ajedrez.motor.piezas.Pieza;
+import com.ajedrez.motor.piezas.Torre;
+
 import static com.ajedrez.motor.tablero.Tablero.*;
 
 public abstract class Movida {
@@ -202,10 +204,48 @@ public abstract class Movida {
     }
 
     static abstract class MovidaEnroque extends Movida {
+        protected final Torre torreDeEnroque;
+        protected final int torreDeEnroqueInicio;
+        protected final int torreDeEnroqueDestino;
+
         public MovidaEnroque(final Tablero tablero,
                              final Pieza piezaMovida,
-                             final int coordenadasDestino) {
+                             final int coordenadasDestino,
+                             final Torre torreDeEnroque,
+                             final int torreDeEnroqueInicio,
+                             final int torreDeEnroqueDestino) {
             super(tablero, piezaMovida, coordenadasDestino);
+            this.torreDeEnroque = torreDeEnroque;
+            this.torreDeEnroqueInicio = torreDeEnroqueInicio;
+            this.torreDeEnroqueDestino = torreDeEnroqueDestino;
+        }
+
+        public Torre getTorreDeEnroque() {
+            return this.torreDeEnroque;
+        }
+
+        @Override
+        public boolean isMovidaEnroque() {
+            return true;
+        }
+
+        @Override
+        public Tablero ejecutar() {
+
+            final Builder builder = new Builder();
+            for (final Pieza pieza : this.tablero.getJugadorActual().getPiezasActivas()) {
+                if (!this.piezaMovida.equals(pieza) && !this.torreDeEnroque.equals(pieza)) {
+                    builder.setPieza(pieza);
+                }
+            }
+            for (final Pieza pieza : this.tablero.getJugadorActual().getOponente().getPiezasActivas()) {
+                builder.setPieza(pieza);
+            }
+            builder.setPieza(this.piezaMovida.moverPieza(this));
+            // todo  : pasar true/false a cada pieza si es primeraMovida o no
+            builder.setPieza(new Torre( this.torreDeEnroqueDestino, this.torreDeEnroque.getAlianzaPieza()));
+            builder.setSiguienteTurno(this.tablero.getJugadorActual().getOponente().getAlianza());
+            return builder.build();
         }
     }
 
@@ -213,8 +253,16 @@ public abstract class Movida {
 
         public EnroqueCorto(final Tablero tablero,
                             final Pieza piezaMovida,
-                            final int coordenadasDestino) {
-            super(tablero, piezaMovida, coordenadasDestino);
+                            final int coordenadasDestino,
+                            final Torre torreDeEnroque,
+                            final int torreDeEnroqueInicio,
+                            final int torreDeEnroqueDestino) {
+            super(tablero,piezaMovida,coordenadasDestino,torreDeEnroque,torreDeEnroqueInicio,torreDeEnroqueDestino);
+        }
+
+        @Override
+        public String toString() {
+            return "O-O";
         }
     }
 
@@ -222,8 +270,16 @@ public abstract class Movida {
 
         public EnroqueLargo(final Tablero tablero,
                             final Pieza piezaMovida,
-                            final int coordenadasDestino) {
-            super(tablero, piezaMovida, coordenadasDestino);
+                            final int coordenadasDestino,
+                            final Torre torreDeEnroque,
+                            final int torreDeEnroqueInicio,
+                            final int torreDeEnroqueDestino) {
+            super(tablero,piezaMovida,coordenadasDestino,torreDeEnroque,torreDeEnroqueInicio,torreDeEnroqueDestino);
+        }
+
+        @Override
+        public String toString() {
+            return "O-O-O";
         }
     }
 
