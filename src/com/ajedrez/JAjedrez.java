@@ -1,5 +1,6 @@
-package com.ajedrez.motor;
+package com.ajedrez;
 
+import com.ajedrez.interfaz.Tabla;
 import com.ajedrez.motor.tablero.Tablero;
 
 public class JAjedrez {
@@ -8,5 +9,7 @@ public class JAjedrez {
 
         Tablero tablero = Tablero.crearTableroEstandar();
         System.out.println(tablero);
+
+        Tabla tabla = new Tabla();
     }
 }
